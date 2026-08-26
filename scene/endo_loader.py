@@ -52,12 +52,7 @@ class EndoNeRF_Dataset(object):
         test_every=8,
         mode='binocular'
     ):
-        self.img_wh = (
-            int(576 / downsample),
-            int(640 / downsample),
-            #int(640 / downsample),
-            #int(512 / downsample),
-        )
+        self.img_wh = None
         self.root_dir = datadir
         self.downsample = downsample 
         self.blender2opencv = np.eye(4)
@@ -110,6 +105,10 @@ class EndoNeRF_Dataset(object):
         # get paths of images, depths, masks, etc.
         agg_fn = lambda filetype: sorted(glob.glob(os.path.join(self.root_dir, filetype, "*.png")))
         self.image_paths = agg_fn("images")
+        if not self.image_paths:
+            raise FileNotFoundError(f"No PNG images found in {os.path.join(self.root_dir, 'images')}")
+        with Image.open(self.image_paths[0]) as first_image:
+            self.img_wh = first_image.size
         if self.mode == 'binocular':
             self.depth_paths = agg_fn("depth")
         elif self.mode == 'monocular':

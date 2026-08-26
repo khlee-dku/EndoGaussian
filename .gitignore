@@ -12,3 +12,23 @@ argument/
 scripts/
 *.sh 
 .ply
+
+# Local environments and IDE state
+.venv/
+.idea/
+
+# Keep the sample launcher and preprocessing helpers visible, while generated
+# video data remains ignored.
+!run_sample.sh
+!scripts/
+scripts/*
+!scripts/preprocess_sample_video.py
+!scripts/validate_sample_dataset.py
+!scripts/generate_black_masks.py
+!scripts/generate_monodepth.py
+!scripts/generate_identity_poses.py
+!data/
+data/*
+!data/sample/
+data/sample/*
+!data/sample/README.md
